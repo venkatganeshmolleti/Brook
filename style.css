@@ -37,6 +37,20 @@ display:none;
 #splash{
 background:#000;
 }
+#splash::after{
+content:"";
+
+position:absolute;
+inset:0;
+
+background:url("./brook.png") center center/cover no-repeat;
+
+filter:blur(40px) brightness(.25);
+
+transform:scale(1.2);
+
+z-index:1;
+}
 
 /* PURPLE AMBIENT GLOW */
 
@@ -70,28 +84,20 @@ transform:scale(1.15);
 
 #brookCharacter{
 position:absolute;
-z-index:2;
+left:50%;
+top:50%;
 
-width:100%;
-height:100%;
+width:85%;
+height:85%;
+
+transform:translate(-50%,-50%);
 
 object-fit:contain;
 object-position:center;
-}
 
-#splash::after{
-content:"";
+z-index:2;
 
-position:absolute;
-inset:0;
-
-background:url("./brook.png") center center/cover no-repeat;
-
-filter:blur(35px) brightness(.35);
-
-transform:scale(1.15);
-
-z-index:1;
+transition:all 2s ease;
 }
 
 /* CLICK EFFECT */
