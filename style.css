@@ -15,16 +15,15 @@ body{
 }
 
 #brookCharacter{
-    position:fixed;
+    position:absolute;
     inset:0;
 
     width:100vw;
     height:100vh;
 
     object-fit:cover;
-    object-position:center;
 
-    display:block;
+    transform:scale(2.3);
 }
 
 .brook-title{
