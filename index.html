@@ -10,24 +10,51 @@
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
-<section id="splash">
+  <main class="app-container">
+    
+    <section id="splash" class="screen">
+      <div class="splash-content">
+        <h1 class="brook-title">BROOK</h1>
+        <img id="brookCharacter" src="./brook.png" alt="Brook" class="brook-image">
+        <p class="tap-text">( TAP BROOK )</p>
+      </div>
+    </section>
 
-    <div class="aura"></div>
+    <section id="intro" class="screen" style="display: none;">
+      <div class="intro-content">
+        <h2>YOHOHOHOHO!</h2>
+        <p>I'm Brook,<br>musician of the Straw Hat Pirates.</p>
+        <button id="skipIntro" class="btn-primary">SKIP ➜</button>
+        <audio id="introAudio" src="./brook-intro.mp3"></audio> 
+      </div>
+    </section>
 
-    <img
-    id="brookCharacter"
-    src="./brook.png"
-    alt="Brook"
->
+    <section id="loading" class="screen" style="display: none;">
+      <div class="loading-content">
+        <h2>Preparing our next adventure...</h2>
+        <p class="pulse-text">👻 Soul scouting for answers...</p>
+      </div>
+    </section>
 
-    <h1 class="brook-title">BROOK</h1>
+    <section id="chat" class="screen chat-screen" style="display: none;">
+      <header class="chat-header">
+        <h2>Soul King Chat</h2>
+      </header>
+      
+      <div class="messages">
+        <div class="brook-msg">YOHOHOHOHO! Welcome back, Captain!</div>
+      </div>
+      
+      <div class="composer">
+        <input type="text" placeholder="Ask Brook something..." autocomplete="off">
+        <button class="btn-submit">➜</button>
+      </div>
+    </section>
 
-    <div class="tap-text">
-        ( TAP BROOK )
-    </div>
-
-</section>
+  </main>
+  <script src="script.js"></script>
+</body>
+ 
 
 <!-- INTRO SCREEN -->
 <section id="intro">
