@@ -6,27 +6,38 @@
 }
 
 body {
-  background: linear-gradient(135deg, #09090b, #1e1b4b, #000000);
+  background: #000000; /* Pure black background to perfectly blend the image */
   color: #e0e0e0;
   font-family: 'Poppins', sans-serif;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
-/* Glassmorphism App Container */
+/* App Container - Fully Responsive Layout */
 .app-container {
-  width: 100%;
-  max-width: 450px; 
-  height: 85vh;
+  width: 100vw; 
+  height: 100vh;
   position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px); 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #09090b 0%, #121026 50%, #000000 100%);
+  box-shadow: none;
+  border: none;
+}
+
+/* Desktop-only optimization: turns into a clean mobile frame on larger displays */
+@media (min-width: 480px) {
+  .app-container {
+    width: 100%;
+    max-width: 430px; 
+    height: 88vh;
+    border-radius: 25px;
+    border: 1px solid rgba(192, 132, 252, 0.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  }
 }
 
 .screen {
@@ -34,109 +45,152 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between; /* Spreads out top, middle, and bottom content */
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 40px 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-/* Typography & Titles */
+/* Splash Screen Specifics */
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
 .brook-title {
   font-family: 'Creepster', cursive;
-  font-size: 3.5rem;
+  font-size: 4rem;
   color: #c084fc; 
-  letter-spacing: 5px;
-  margin-bottom: 20px;
-  text-shadow: 0 0 20px rgba(192, 132, 252, 0.7);
+  letter-spacing: 6px;
+  text-shadow: 0 0 25px rgba(147, 51, 234, 0.8);
 }
 
-h2 {
-  font-family: 'Creepster', cursive;
-  font-size: 2rem;
-  color: #c084fc;
-  margin-bottom: 15px;
-  letter-spacing: 2px;
-}
-
-/* Image Styling & Blend Mode */
 .brook-image {
-  width: 250px;
+  width: 85%;
+  max-width: 280px;
   cursor: pointer;
-  mix-blend-mode: screen; /* Removes the black background */
-  animation: float 3s ease-in-out infinite, purpleGlow 2s infinite alternate;
+  border-radius: 15px;
+  /* Retains full image color richness while keeping the glow */
+  animation: float 3.5s ease-in-out infinite, purpleGlow 2.5s infinite alternate;
 }
 
 .tap-text {
-  margin-top: 20px;
   font-weight: 600;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.6);
+  letter-spacing: 3px;
+  color: rgba(192, 132, 252, 0.7);
+  font-size: 1.1rem;
+  animation: pulse 1.5s infinite alternate;
+}
+
+/* Intro Screen Specifics */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 25px;
+}
+
+.intro-content h2 {
+  font-size: 3rem;
+}
+
+.intro-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #cbd5e1;
 }
 
 /* JS Transition Class */
 .fade {
   opacity: 0;
-  transition: opacity 0.5s ease-out;
+  transition: opacity 0.6s ease-out;
 }
 
 /* Chat UI Styling */
 .chat-screen {
-  justify-content: space-between;
+  padding: 0; /* Remove padding to let chat span edges properly */
 }
 
 .chat-header {
   width: 100%;
-  padding: 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 20px;
+  background: rgba(15, 12, 30, 0.6);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(192, 132, 252, 0.15);
+}
+
+.chat-header h2 {
+  font-family: 'Creepster', cursive;
+  font-size: 2.2rem;
+  color: #c084fc;
+  margin: 0;
+  letter-spacing: 2px;
 }
 
 .messages {
   flex-grow: 1;
   width: 100%;
   overflow-y: auto;
-  padding: 15px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .brook-msg, .user-msg {
-  padding: 10px 15px;
-  border-radius: 15px;
-  max-width: 80%;
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 75%;
   word-wrap: break-word;
-  animation: popIn 0.3s ease-out;
-  font-size: 0.95rem;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .brook-msg {
   background: rgba(147, 51, 234, 0.15);
-  border-left: 3px solid #c084fc;
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  border-left: 4px solid #c084fc;
   align-self: flex-start;
-  color: #e9d5ff;
+  color: #f3e8ff;
 }
 
 .user-msg {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   align-self: flex-end;
+  color: #ffffff;
 }
 
 .composer {
   width: 100%;
   display: flex;
-  padding: 15px;
-  gap: 10px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 16px;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(192, 132, 252, 0.15);
 }
 
 .composer input {
   flex-grow: 1;
-  background: rgba(0,0,0,0.4);
+  background: rgba(15, 12, 30, 0.8);
   border: 1px solid rgba(192, 132, 252, 0.3);
-  border-radius: 20px;
-  padding: 10px 15px;
+  border-radius: 25px;
+  padding: 12px 20px;
   color: white;
   outline: none;
+  font-size: 1rem;
+  transition: border-color 0.2s;
 }
 
 .composer input:focus {
@@ -145,45 +199,55 @@ h2 {
 
 /* Buttons */
 .btn-primary, .btn-submit {
-  background: #9333ea;
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
+  padding: 12px 28px;
+  border-radius: 25px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1rem;
   transition: transform 0.2s, box-shadow 0.2s;
-  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+}
+
+.btn-submit {
+  padding: 12px 20px;
 }
 
 .btn-primary:hover, .btn-submit:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(192, 132, 252, 0.6);
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
+}
+
+/* Loading Screen Content Styling */
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 15px;
 }
 
 /* Animations */
 @keyframes float {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
+  50% { transform: translateY(-12px); }
   100% { transform: translateY(0px); }
 }
 
 @keyframes purpleGlow {
-  from { filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.3)); }
-  to { filter: drop-shadow(0 0 25px rgba(192, 132, 252, 0.8)); }
+  from { filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.4)); }
+  to { filter: drop-shadow(0 0 28px rgba(147, 51, 234, 0.9)); }
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  from { opacity: 0; transform: scale(0.85) translateY(12px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.pulse-text {
-  animation: pulse 1.5s infinite alternate;
-  color: #c084fc;
-}
-
 @keyframes pulse {
-  from { opacity: 0.5; }
-  to { opacity: 1; text-shadow: 0 0 8px rgba(192, 132, 252, 0.8); }
+  from { opacity: 0.4; text-shadow: 0 0 4px rgba(192, 132, 252, 0.2); }
+  to { opacity: 1; text-shadow: 0 0 12px rgba(192, 132, 252, 0.8); }
 }
