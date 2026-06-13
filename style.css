@@ -60,12 +60,23 @@ transform:scale(1.12);
 }
 
 #brookCharacter{
-width:70vw;
-max-width:350px;
-height:auto;
+position:absolute;
+
+top:0;
+left:0;
+
+width:100vw;
+height:100vh;
+
+object-fit:cover;
+object-position:center;
+
 cursor:pointer;
+
 z-index:2;
+
 transition:all 2s ease;
+
 filter:
 drop-shadow(0 0 20px #b84dff)
 drop-shadow(0 0 80px #7a00ff);
@@ -78,21 +89,45 @@ transition:all 2s ease;
 }
 
 .brook-title{
+position:absolute;
+
+bottom:120px;
+
+left:50%;
+
+transform:translateX(-50%);
+
 font-size:3rem;
+
 letter-spacing:8px;
-margin-top:20px;
+
 color:#d6a2ff;
+
 text-shadow:
 0 0 15px #7a00ff,
 0 0 40px #7a00ff;
+
+z-index:5;
 }
 
 .tap-text{
-margin-top:15px;
+position:absolute;
+
+bottom:80px;
+
+left:50%;
+
+transform:translateX(-50%);
+
 font-size:.9rem;
+
 letter-spacing:5px;
+
 color:#c89cff;
+
 opacity:.8;
+
+z-index:5;
 }
 
 /* INTRO OVERLAY */
