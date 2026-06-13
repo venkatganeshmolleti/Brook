@@ -69,25 +69,29 @@ transform:scale(1.15);
 /* BROOK IMAGE */
 
 #brookCharacter{
-
 position:absolute;
-inset:0;
+z-index:2;
 
 width:100%;
 height:100%;
 
-object-fit:cover;
+object-fit:contain;
 object-position:center;
+}
 
-z-index:2;
+#splash::after{
+content:"";
 
-transition:all 2s ease;
+position:absolute;
+inset:0;
 
-filter:
-brightness(.95)
-drop-shadow(0 0 30px #9d4dff)
-drop-shadow(0 0 90px #7a00ff);
+background:url("./brook.png") center center/cover no-repeat;
 
+filter:blur(35px) brightness(.35);
+
+transform:scale(1.15);
+
+z-index:1;
 }
 
 /* CLICK EFFECT */
