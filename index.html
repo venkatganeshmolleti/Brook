@@ -1,817 +1,639 @@
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BROOK — Your Personal AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#05050A">
+<meta name="description" content="BROOK — Your Personal Soul King AI Companion">
+<title>BROOK — Soul King AI</title>
+<link rel="stylesheet" href="css/style.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --void: #05050a;
-  --deep: #0c0c14;
-  --surface: #12121e;
-  --raised: #1a1a2e;
-  --rim: #252540;
-  --mist: #9090b8;
-  --text: #e8e8f4;
-  --bright: #ffffff;
-  --brook: #6ee7f7;
-  --brook2: #a78bfa;
-  --brook-glow: rgba(110,231,247,0.12);
-  --gemini: #4facfe;
-  --groq: #ff9f43;
-  --user-bubble: #1a1040;
-  --danger: #ff6b6b;
-  --success: #6ee7b7;
+/* Inline keyframes needed before JS loads */
+@keyframes soul-dot {
+  0%{opacity:0;transform:translateY(0) scale(0);}
+  30%{opacity:0.8;}
+  100%{opacity:0;transform:translateY(-70px) scale(1.5);}
 }
-
-html, body { height: 100%; overflow: hidden; }
-
-body {
-  background: var(--void);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── HEADER ── */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  height: 60px;
-  background: var(--deep);
-  border-bottom: 1px solid var(--rim);
-  flex-shrink: 0;
-  gap: 12px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-
-.brand-mark {
-  position: relative;
-  width: 34px;
-  height: 34px;
-}
-
-.brand-mark svg {
-  width: 34px;
-  height: 34px;
-}
-
-.brand-name {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: 3px;
-  color: var(--bright);
-}
-
-.brand-tag {
-  font-size: 10px;
-  color: var(--mist);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-top: -2px;
-}
-
-/* Model switcher */
-.model-switcher {
-  display: flex;
-  background: var(--void);
-  border: 1px solid var(--rim);
-  border-radius: 10px;
-  padding: 3px;
-  gap: 2px;
-}
-
-.model-btn {
-  padding: 5px 12px;
-  border-radius: 7px;
-  border: none;
-  background: transparent;
-  font-family: 'Syne', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: var(--mist);
-}
-
-.model-btn:hover:not(.active) { color: var(--text); }
-
-.model-btn.active.brook-mode {
-  background: linear-gradient(135deg, #6ee7f7, #a78bfa);
-  color: #05050a;
-}
-
-.model-btn.active.gemini-mode {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: #05050a;
-}
-
-.model-btn.active.groq-mode {
-  background: linear-gradient(135deg, #ff9f43, #ff6b6b);
-  color: #05050a;
-}
-
-/* ── SETUP OVERLAY ── */
-.setup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5,5,10,0.92);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  padding: 20px;
-}
-
-.setup-panel {
-  background: var(--surface);
-  border: 1px solid var(--rim);
-  border-radius: 24px;
-  width: 100%;
-  max-width: 420px;
-  overflow: hidden;
-}
-
-.setup-header {
-  padding: 32px 32px 0;
-  text-align: center;
-}
-
-.setup-glyph {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
-  background: linear-gradient(135deg, var(--brook), var(--brook2));
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-}
-
-.setup-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--bright);
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
-}
-
-.setup-sub {
-  font-size: 13px;
-  color: var(--mist);
-  line-height: 1.6;
-}
-
-.setup-sub a { color: var(--brook); text-decoration: none; }
-
-.setup-tabs {
-  display: flex;
-  padding: 24px 32px 0;
-  gap: 6px;
-}
-
-.setup-tab {
-  flex: 1;
-  padding: 9px;
-  border-radius: 9px;
-  border: 1px solid var(--rim);
-  background: var(--deep);
-  font-family: 'Syne', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: var(--mist);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.setup-tab.active {
-  border-color: var(--brook);
-  color: var(--brook);
-  background: var(--brook-glow);
-}
-
-.setup-body { padding: 20px 32px 32px; }
-
-.key-block { display: none; }
-.key-block.active { display: block; }
-
-.key-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--mist);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-.key-input {
-  width: 100%;
-  background: var(--deep);
-  border: 1px solid var(--rim);
-  border-radius: 10px;
-  padding: 12px 14px;
-  color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  outline: none;
-  transition: border-color 0.2s;
-  margin-bottom: 8px;
-}
-
-.key-input:focus { border-color: var(--brook); }
-.key-input::placeholder { color: var(--rim); }
-
-.key-hint {
-  font-size: 11px;
-  color: var(--mist);
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-.key-hint a { color: var(--brook); text-decoration: none; }
-
-.setup-cta {
-  width: 100%;
-  padding: 13px;
-  border-radius: 11px;
-  border: none;
-  background: linear-gradient(135deg, var(--brook), var(--brook2));
-  color: var(--void);
-  font-family: 'Syne', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.setup-cta:hover { opacity: 0.88; }
-
-.setup-footer {
-  font-size: 11px;
-  color: var(--mist);
-  text-align: center;
-  margin-top: 14px;
-  line-height: 1.5;
-}
-
-/* ── CHAT ── */
-.chat-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  scroll-behavior: smooth;
-}
-
-.messages::-webkit-scrollbar { width: 3px; }
-.messages::-webkit-scrollbar-thumb { background: var(--rim); border-radius: 2px; }
-
-/* Welcome */
-.welcome {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 20px;
-  flex: 1;
-  min-height: 60vh;
-}
-
-.welcome-logo {
-  width: 72px;
-  height: 72px;
-  background: linear-gradient(135deg, var(--brook), var(--brook2));
-  border-radius: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 40px var(--brook-glow);
-}
-
-.welcome-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: var(--bright);
-  margin-bottom: 10px;
-}
-
-.welcome-title span {
-  background: linear-gradient(135deg, var(--brook), var(--brook2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.welcome-sub {
-  font-size: 14px;
-  color: var(--mist);
-  line-height: 1.7;
-  max-width: 300px;
-  margin-bottom: 28px;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  max-width: 380px;
-}
-
-.chip {
-  background: var(--raised);
-  border: 1px solid var(--rim);
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 12px;
-  color: var(--mist);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'Inter', sans-serif;
-}
-
-.chip:hover {
-  border-color: var(--brook);
-  color: var(--brook);
-  background: var(--brook-glow);
-}
-
-/* Messages */
-.msg-row {
-  display: flex;
-  gap: 10px;
-  max-width: 86%;
-  animation: rise 0.25s ease;
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.msg-row.user {
-  align-self: flex-end;
-  flex-direction: row-reverse;
-}
-
-.msg-row.ai { align-self: flex-start; }
-
-.msg-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-
-.msg-row.user .msg-avatar {
-  background: linear-gradient(135deg, var(--brook), var(--brook2));
-}
-
-.msg-row.ai .msg-avatar {
-  background: var(--raised);
-  border: 1px solid var(--rim);
-}
-
-.msg-content { display: flex; flex-direction: column; gap: 3px; }
-
-.msg-label {
-  font-size: 10px;
-  color: var(--mist);
-  letter-spacing: 0.5px;
-  padding-left: 2px;
-}
-
-.msg-bubble {
-  padding: 11px 15px;
-  border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.7;
-  word-break: break-word;
-}
-
-.msg-row.user .msg-bubble {
-  background: var(--user-bubble);
-  border: 1px solid rgba(110,231,247,0.15);
-  border-bottom-right-radius: 4px;
-  color: var(--text);
-}
-
-.msg-row.ai .msg-bubble {
-  background: var(--surface);
-  border: 1px solid var(--rim);
-  border-bottom-left-radius: 4px;
-  color: var(--text);
-}
-
-.msg-bubble code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  background: var(--void);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: var(--brook);
-}
-
-.msg-bubble pre {
-  background: var(--void);
-  border: 1px solid var(--rim);
-  border-radius: 10px;
-  padding: 14px;
-  margin: 10px 0;
-  overflow-x: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--brook);
-}
-
-.msg-bubble pre code {
-  background: none;
-  padding: 0;
-  color: inherit;
-}
-
-/* Typing */
-.typing-dots {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  padding: 6px 2px;
-}
-
-.typing-dots span {
-  width: 5px;
-  height: 5px;
-  background: var(--mist);
-  border-radius: 50%;
-  animation: dot 1.3s infinite;
-}
-
-.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes dot {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30% { transform: translateY(-5px); opacity: 1; }
-}
-
-/* ── INPUT ── */
-.composer {
-  padding: 12px 16px 20px;
-  border-top: 1px solid var(--rim);
-  background: var(--deep);
-  flex-shrink: 0;
-}
-
-.composer-box {
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  background: var(--surface);
-  border: 1px solid var(--rim);
-  border-radius: 14px;
-  padding: 10px 12px;
-  transition: border-color 0.2s;
-}
-
-.composer-box:focus-within { border-color: var(--brook); }
-
-.composer-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  resize: none;
-  max-height: 120px;
-  line-height: 1.55;
-}
-
-.composer-input::placeholder { color: var(--rim); }
-
-.send {
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(135deg, var(--brook), var(--brook2));
-  border: none;
-  border-radius: 9px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s, transform 0.1s;
-  flex-shrink: 0;
-}
-
-.send:hover { opacity: 0.85; }
-.send:active { transform: scale(0.9); }
-.send:disabled { opacity: 0.25; cursor: not-allowed; }
-.send svg { width: 14px; height: 14px; fill: var(--void); }
-
-.composer-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  padding: 0 2px;
-}
-
-.active-model-tag {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.active-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
-
-.meta-actions { display: flex; gap: 12px; }
-
-.meta-btn {
-  font-size: 11px;
-  color: var(--mist);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: color 0.2s;
-}
-
-.meta-btn:hover { color: var(--text); }
-.meta-btn.danger:hover { color: var(--danger); }
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 90px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--surface);
-  border: 1px solid var(--rim);
-  border-radius: 10px;
-  padding: 10px 18px;
-  font-size: 13px;
-  color: var(--text);
-  opacity: 0;
-  transition: all 0.3s;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: 200;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="header">
-  <div class="brand">
-    <div class="brand-mark">
-      <svg viewBox="0 0 34 34" fill="none">
-        <rect width="34" height="34" rx="10" fill="url(#bg)"/>
-        <path d="M9 17 C9 12, 14 9, 17 9 C20 9, 25 12, 25 17 C25 22, 20 25, 17 25" stroke="#6ee7f7" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="17" cy="17" r="3" fill="#a78bfa"/>
-        <circle cx="11" cy="22" r="1.5" fill="#6ee7f7" opacity="0.6"/>
-        <defs>
-          <linearGradient id="bg" x1="0" y1="0" x2="34" y2="34">
-            <stop offset="0%" stop-color="#12121e"/>
-            <stop offset="100%" stop-color="#1a1a2e"/>
-          </linearGradient>
-        </defs>
-      </svg>
+<!-- Particle Canvas -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- ══════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════ -->
+<div class="screen active" id="home">
+  <div class="home-inner">
+
+    <!-- Avatar -->
+    <div class="avatar-stage">
+      <div class="aura-outer"></div>
+      <div class="aura-mid"></div>
+      <div class="aura-inner"></div>
+      <div class="avatar-img">
+        <img src="assets/avatar.svg" alt="BROOK" draggable="false">
+        <div id="soulDotsStage" style="position:absolute;inset:0;border-radius:50%;overflow:visible;pointer-events:none;"></div>
+      </div>
+      <div class="music-notes" id="musicNotesStage"></div>
     </div>
-    <div>
-      <div class="brand-name">BROOK</div>
-      <div class="brand-tag">Personal AI</div>
+
+    <!-- Text -->
+    <div class="home-text">
+      <div class="home-yohoho">✦ YOHOHOHOHO! ✦</div>
+      <div class="home-title">Welcome back,<br>Captain.</div>
+      <div class="home-sub">Soul King AI Companion</div>
+      <div class="home-question">What shall we build today?</div>
     </div>
+
+    <!-- Actions -->
+    <div class="home-actions">
+      <button class="start-btn" onclick="goTo('chat')">START CHAT</button>
+      <div class="model-pills">
+        <div class="mpill p-active" id="pill-claude" onclick="selectModel('claude')">CLAUDE</div>
+        <div class="mpill" id="pill-gemini" onclick="selectModel('gemini')">GEMINI</div>
+        <div class="mpill" id="pill-groq" onclick="selectModel('groq')">GROQ</div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="model-switcher" id="modelSwitcher">
-    <button class="model-btn active brook-mode" onclick="switchModel('claude')">CLAUDE</button>
-    <button class="model-btn gemini-mode" onclick="switchModel('gemini')">GEMINI</button>
-    <button class="model-btn groq-mode" onclick="switchModel('groq')">GROQ</button>
-  </div>
-</header>
-
-<!-- Setup Overlay -->
-<div class="setup-overlay" id="setupOverlay">
-  <div class="setup-panel">
-    <div class="setup-header">
-      <div class="setup-glyph">🔑</div>
-      <div class="setup-title">Connect BROOK</div>
-      <div class="setup-sub">Add your API keys to power BROOK. At least one is needed to start.</div>
-    </div>
-
-    <div class="setup-tabs">
-      <button class="setup-tab active" onclick="showTab('claude', this)">CLAUDE</button>
-      <button class="setup-tab" onclick="showTab('gemini', this)">GEMINI</button>
-      <button class="setup-tab" onclick="showTab('groq', this)">GROQ</button>
-    </div>
-
-    <div class="setup-body">
-      <div class="key-block active" id="tab-claude">
-        <div class="key-label">Anthropic API Key</div>
-        <input type="password" class="key-input" id="claudeKey" placeholder="sk-ant-api03-..." />
-        <div class="key-hint">Best quality model. Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
-      </div>
-      <div class="key-block" id="tab-gemini">
-        <div class="key-label">Google Gemini API Key</div>
-        <input type="password" class="key-input" id="geminiKey" placeholder="AIza..." />
-        <div class="key-hint">Free & generous tier. Get your key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></div>
-      </div>
-      <div class="key-block" id="tab-groq">
-        <div class="key-label">Groq API Key</div>
-        <input type="password" class="key-input" id="groqKey" placeholder="gsk_..." />
-        <div class="key-hint">Fastest responses. Free tier at <a href="https://console.groq.com" target="_blank">console.groq.com</a></div>
-      </div>
-
-      <button class="setup-cta" onclick="saveKeys()">LAUNCH BROOK →</button>
-      <div class="setup-footer">🔒 Keys are stored only in your browser and never shared.</div>
-    </div>
+  <!-- Settings icon -->
+  <div style="position:absolute;top:16px;right:16px;z-index:10;">
+    <button class="icon-btn" onclick="openKeys()">⚙️</button>
   </div>
 </div>
 
-<!-- Chat -->
-<div class="chat-wrap" id="chatWrap">
-  <div class="messages" id="messages">
-    <div class="welcome" id="welcomeScreen">
-      <div class="welcome-logo">🤖</div>
-      <div class="welcome-title">Hello, I'm <span>BROOK</span></div>
-      <div class="welcome-sub">Your personal AI — powered by Claude, Gemini, and Groq. Switch models anytime.</div>
-      <div class="chips">
-        <div class="chip" onclick="suggest('Build me a portfolio website in HTML')">Build a portfolio site</div>
-        <div class="chip" onclick="suggest('Explain Data Science like I am 18')">Explain Data Science</div>
-        <div class="chip" onclick="suggest('Write a Python script to rename files in a folder')">Python file script</div>
-        <div class="chip" onclick="suggest('Give me 5 unique project ideas for a CS student')">CS project ideas</div>
-        <div class="chip" onclick="suggest('What are the best free APIs for developers?')">Free APIs for devs</div>
-        <div class="chip" onclick="suggest('Review my approach: I want to learn ML in 3 months')">Learn ML in 3 months</div>
-      </div>
+<!-- ══════════════════════════════════
+     CHAT SCREEN
+══════════════════════════════════ -->
+<div class="screen" id="chat">
+  <div class="nav">
+    <div class="nav-logo">BROOK</div>
+    <div class="nav-actions">
+      <button class="icon-btn" id="voiceNavBtn" onclick="toggleVoice()" title="Voice">🔇</button>
+      <button class="icon-btn" onclick="openKeys()">⚙️</button>
     </div>
   </div>
 
+  <!-- Model switcher -->
+  <div class="chat-model-bar">
+    <button class="cmpill cp-active" id="cm-claude" onclick="chatModel('claude')">CLAUDE</button>
+    <button class="cmpill" id="cm-gemini" onclick="chatModel('gemini')">GEMINI</button>
+    <button class="cmpill" id="cm-groq" onclick="chatModel('groq')">GROQ</button>
+  </div>
+
+  <!-- Soul mode bar -->
+  <div class="soul-bar" id="soulBar">
+    <div class="soul-ghost-bar">👻</div>
+    <div>
+      <div class="soul-bar-text">Soul scouting for answers...</div>
+      <div class="soul-bar-notes">🎻 ♪ ♫ ♪</div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages" id="chatMessages">
+    <div class="msg-row ai">
+      <div class="msg-av">💀</div>
+      <div class="msg-body">
+        <div class="msg-label">🌀 Brook</div>
+        <div class="msg-bubble">
+          YOHOHOHOHO! Welcome, Captain! I am BROOK — your Soul King AI companion.<br><br>
+          I can help you with <strong>code</strong>, <strong>ideas</strong>, <strong>travel plans</strong>, or just about anything else. The adventure begins! 🎻
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick chips -->
+    <div style="display:flex;flex-wrap:wrap;gap:7px;padding:4px 0 8px 36px;">
+      <button onclick="quickSend('Help me build a portfolio website')" style="padding:6px 12px;border-radius:16px;border:1px solid var(--rim2);background:var(--glass);color:var(--mist2);font-size:11px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--rim2)'">Portfolio site</button>
+      <button onclick="quickSend('Explain machine learning simply')" style="padding:6px 12px;border-radius:16px;border:1px solid var(--rim2);background:var(--glass);color:var(--mist2);font-size:11px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--rim2)'">Explain ML</button>
+      <button onclick="quickSend('Plan a 3-day trip to Goa')" style="padding:6px 12px;border-radius:16px;border:1px solid var(--rim2);background:var(--glass);color:var(--mist2);font-size:11px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--rim2)'">Travel: Goa</button>
+      <button onclick="quickSend('Give me 5 CS project ideas')" style="padding:6px 12px;border-radius:16px;border:1px solid var(--rim2);background:var(--glass);color:var(--mist2);font-size:11px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--rim2)'">CS projects</button>
+    </div>
+  </div>
+
+  <!-- Composer -->
   <div class="composer">
     <div class="composer-box">
-      <textarea class="composer-input" id="msgInput" rows="1"
-        placeholder="Ask BROOK anything..."
+      <textarea class="chat-inp" id="msgInp" rows="1"
+        placeholder="Ask BROOK anything, Captain..."
         onkeydown="handleKey(event)"
-        oninput="autoResize(this)"></textarea>
-      <button class="send" id="sendBtn" onclick="send()">
+        oninput="autoRes(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMsg()">
         <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
       </button>
     </div>
     <div class="composer-meta">
-      <div class="active-model-tag" id="activeTag">
-        <div class="active-dot" id="activeDot" style="background:var(--brook)"></div>
-        <span id="activeLabel" style="color:var(--brook)">Claude</span>
+      <div class="live-tag">
+        <div class="live-dot" id="liveDot"></div>
+        <span id="liveLabel" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--purple);">Claude</span>
       </div>
-      <div class="meta-actions">
-        <button class="meta-btn" onclick="openSettings()">⚙ Keys</button>
-        <button class="meta-btn danger" onclick="clearChat()">Clear</button>
+      <div class="meta-right">
+        <button class="meta-b" onclick="saveCurrentChat()">💾 Save</button>
+        <button class="meta-b red" onclick="clearChat()">Clear</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════
+     MEMORY SCREEN
+══════════════════════════════════ -->
+<div class="screen" id="memory">
+  <div class="nav">
+    <div class="nav-logo">BROOK</div>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="addNote()" title="Add Note">📝</button>
+    </div>
+  </div>
+
+  <div class="memory-content">
+    <!-- Search -->
+    <div class="memory-search">
+      <span>🔍</span>
+      <input class="mem-search-inp" id="memSearch" placeholder="Search memories..."
+        oninput="searchMemory(this.value)"/>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mem-tabs">
+      <button class="mem-tab active" onclick="setMemTab('notes', this)">Notes</button>
+      <button class="mem-tab" onclick="setMemTab('ideas', this)">Ideas</button>
+      <button class="mem-tab" onclick="setMemTab('projects', this)">Projects</button>
+      <button class="mem-tab" onclick="setMemTab('chats', this)">Chats</button>
+    </div>
+
+    <!-- Add buttons -->
+    <div style="display:flex;gap:8px;">
+      <button class="add-note-btn" onclick="addNote()" style="flex:1;">
+        <span>📝</span> Add Note
+      </button>
+      <button class="add-note-btn" onclick="addIdea()" style="flex:1;">
+        <span>💡</span> Add Idea
+      </button>
+    </div>
+    <button class="add-note-btn" onclick="addProject()">
+      <span>🚀</span> Add Project
+    </button>
+
+    <!-- Content -->
+    <div class="notes-list" id="memContent">
+      <p style="color:var(--mist);text-align:center;padding:30px 0;font-size:13px;">
+        No notes yet, Captain. Start saving your ideas!
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PROFILE SCREEN
+══════════════════════════════════ -->
+<div class="screen" id="profile">
+  <div class="nav">
+    <div class="nav-logo">BROOK</div>
+  </div>
+
+  <div class="profile-scroll">
+    <!-- Wanted Poster -->
+    <div class="wanted-poster">
+      <div class="wanted-poster-inner">
+        <div class="wp-header">— W A N T E D —</div>
+        <div class="wp-name">BROOK</div>
+        <div class="wp-subtitle">SOUL KING AI COMPANION</div>
+
+        <div class="wp-portrait">
+          <img src="assets/avatar.svg" alt="BROOK portrait">
+        </div>
+
+        <div class="wp-divider"></div>
+        <div class="wp-bounty-label">B O U N T Y</div>
+        <div class="wp-bounty">∞ Berry</div>
+        <div class="wp-divider"></div>
+        <div class="wp-yohoho">"YOHOHOHOHO!"</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="profile-cards">
+      <div class="pcard">
+        <div class="pcard-val" style="color:var(--purple)">3</div>
+        <div class="pcard-label">Models</div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-val" style="color:var(--cyan)">∞</div>
+        <div class="pcard-label">Knowledge</div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-val" style="color:var(--gold)">♾</div>
+        <div class="pcard-label">Bounty</div>
+      </div>
+    </div>
+
+    <!-- Abilities -->
+    <div style="width:100%;max-width:340px;">
+      <div class="sec-title" style="margin-bottom:10px;">Abilities</div>
+      <div class="settings-card">
+        <div class="srow" style="cursor:default;">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(167,139,250,0.1);">💻</div>
+            <div><div class="srow-name">Code Master</div><div class="srow-desc">HTML, CSS, JS, Python, React</div></div>
+          </div>
+        </div>
+        <div class="srow" style="cursor:default;">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(110,231,247,0.1);">✈️</div>
+            <div><div class="srow-name">Travel Guide</div><div class="srow-desc">Itineraries & recommendations</div></div>
+          </div>
+        </div>
+        <div class="srow" style="cursor:default;">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(124,255,178,0.1);">🧠</div>
+            <div><div class="srow-name">Memory Keeper</div><div class="srow-desc">Notes, ideas & saved chats</div></div>
+          </div>
+        </div>
+        <div class="srow" style="cursor:default;">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(251,191,36,0.1);">🎻</div>
+            <div><div class="srow-name">Soul Artist</div><div class="srow-desc">Creative partner & storyteller</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SETTINGS SCREEN
+══════════════════════════════════ -->
+<div class="screen" id="settings">
+  <div class="nav">
+    <div class="nav-logo">BROOK</div>
+  </div>
+
+  <div class="settings-scroll">
+
+    <!-- Voice -->
+    <div>
+      <div class="sec-title">Voice</div>
+      <div class="voice-card">
+        <div class="voice-icon" id="voiceIcon">🔇</div>
+        <div class="voice-status" id="voiceStatus">Voice Off</div>
+      </div>
+      <div class="settings-card" style="margin-top:8px;">
+        <div class="srow">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(167,139,250,0.1);">🎙️</div>
+            <div><div class="srow-name">Enable Voice</div><div class="srow-desc">BROOK reads replies aloud</div></div>
+          </div>
+          <button class="toggle" id="voiceBtn" onclick="toggleVoice()"></button>
+        </div>
+        <div class="srow">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(110,231,247,0.1);">🔁</div>
+            <div><div class="srow-name">Auto Read Replies</div><div class="srow-desc">Speak every response</div></div>
+          </div>
+          <button class="toggle" id="autoReadBtn" onclick="toggleSetting('autoRead', this)"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance -->
+    <div>
+      <div class="sec-title">Appearance</div>
+      <div class="settings-card">
+        <div class="srow">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(167,139,250,0.1);">✨</div>
+            <div><div class="srow-name">Soul Aura</div><div class="srow-desc">Purple glow around avatar</div></div>
+          </div>
+          <button class="toggle on" id="soulAuraBtn" onclick="toggleSetting('soulAura', this)"></button>
+        </div>
+        <div class="srow">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(124,255,178,0.1);">🌟</div>
+            <div><div class="srow-name">Particles</div><div class="srow-desc">Ambient floating particles</div></div>
+          </div>
+          <button class="toggle on" id="particlesBtn" onclick="toggleSetting('particles', this)"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Animations -->
+    <div>
+      <div class="sec-title">Animations</div>
+      <div class="settings-card">
+        <div class="srow">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(251,191,36,0.1);">🎵</div>
+            <div><div class="srow-name">Music Notes</div><div class="srow-desc">Floating notes on home screen</div></div>
+          </div>
+          <button class="toggle on" id="musicNotesBtn" onclick="toggleSetting('musicNotes', this)"></button>
+        </div>
+        <div class="srow">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(124,255,178,0.1);">👻</div>
+            <div><div class="srow-name">Soul Mode</div><div class="srow-desc">Ghost animation while thinking</div></div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Keys -->
+    <div>
+      <div class="sec-title">AI Providers</div>
+      <button class="keys-btn" onclick="openKeys()">
+        <span>🔑 Manage API Keys</span>
+        <span style="color:var(--mist);font-size:13px;">›</span>
+      </button>
+    </div>
+
+    <!-- Data -->
+    <div>
+      <div class="sec-title">Data</div>
+      <div class="settings-card">
+        <div class="srow" style="cursor:pointer;" onclick="exportChats()">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(110,231,247,0.1);">📤</div>
+            <div><div class="srow-name">Export Chats</div><div class="srow-desc">Download as JSON</div></div>
+          </div>
+          <span style="color:var(--mist);font-size:14px;">›</span>
+        </div>
+        <div class="srow" style="cursor:pointer;" onclick="clearMemory()">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(255,107,107,0.1);">🗑️</div>
+            <div><div class="srow-name">Clear Memory</div><div class="srow-desc">Delete all saved data</div></div>
+          </div>
+          <span style="color:var(--danger);font-size:14px;">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div>
+      <div class="sec-title">About</div>
+      <div class="settings-card">
+        <div class="srow" style="cursor:default;">
+          <div class="srow-info">
+            <div class="srow-icon" style="background:rgba(251,191,36,0.1);">💀</div>
+            <div><div class="srow-name">BROOK</div><div class="srow-desc">Soul King AI Companion v1.0</div></div>
+          </div>
+          <span style="font-size:11px;color:var(--mist);font-family:'JetBrains Mono',monospace;">YOHOHO</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     BOTTOM NAV
+══════════════════════════════════ -->
+<div class="bottom-nav">
+  <button class="bnav-btn active" id="bnav-home" onclick="goTo('home')">
+    <span class="bnav-icon">🏠</span>
+    <span class="bnav-label">Home</span>
+  </button>
+  <button class="bnav-btn" id="bnav-chat" onclick="goTo('chat')">
+    <span class="bnav-icon">💬</span>
+    <span class="bnav-label">Chat</span>
+  </button>
+  <button class="bnav-btn" id="bnav-memory" onclick="goTo('memory')">
+    <span class="bnav-icon">🧠</span>
+    <span class="bnav-label">Memory</span>
+  </button>
+  <button class="bnav-btn" id="bnav-profile" onclick="goTo('profile')">
+    <span class="bnav-icon">💀</span>
+    <span class="bnav-label">Wanted</span>
+  </button>
+  <button class="bnav-btn" id="bnav-settings" onclick="goTo('settings')">
+    <span class="bnav-icon">⚙️</span>
+    <span class="bnav-label">Settings</span>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════
+     KEYS OVERLAY
+══════════════════════════════════ -->
+<div class="sheet-overlay hidden" id="keysOverlay" onclick="closeKeys(event)">
+  <div class="sheet" id="keysSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-h">Connect BROOK</div>
+    <div class="sheet-sub">Add at least one API key to start. All keys stored locally.</div>
+
+    <div class="k-tabs">
+      <button class="k-tab active" onclick="showKTab('claude', this)">CLAUDE</button>
+      <button class="k-tab" onclick="showKTab('gemini', this)">GEMINI</button>
+      <button class="k-tab" onclick="showKTab('groq', this)">GROQ</button>
+    </div>
+
+    <div class="k-section active" id="ks-claude">
+      <input type="password" class="k-field" id="kClaude" placeholder="sk-ant-api03-..."/>
+      <div class="k-hint">Best quality · <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
+    </div>
+    <div class="k-section" id="ks-gemini">
+      <input type="password" class="k-field" id="kGemini" placeholder="AIza..."/>
+      <div class="k-hint">Free generous tier · <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></div>
+    </div>
+    <div class="k-section" id="ks-groq">
+      <input type="password" class="k-field" id="kGroq" placeholder="gsk_..."/>
+      <div class="k-hint">Fastest responses · <a href="https://console.groq.com" target="_blank">console.groq.com</a></div>
+    </div>
+
+    <button class="save-keys-btn" onclick="saveKeys()">SAVE KEYS →</button>
+  </div>
+</div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- ══════════════════════════════════
+     INTRO AUDIO OVERLAY
+══════════════════════════════════ -->
+<div id="introOverlay" style="
+  position:fixed;inset:0;
+  background:rgba(5,5,10,0.97);
+  z-index:999;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:0;
+  transition:opacity 0.8s ease;
+">
+  <!-- Animated logo -->
+  <div style="position:relative;width:140px;height:140px;margin-bottom:28px;">
+    <div style="
+      position:absolute;inset:-16px;border-radius:50%;
+      background:conic-gradient(from 0deg,transparent,#A78BFA,#6EE7F7,#7CFFB2,transparent);
+      animation:spin 4s linear infinite;opacity:0.4;filter:blur(6px);
+    "></div>
+    <div style="
+      width:140px;height:140px;border-radius:50%;
+      background:radial-gradient(circle at 40% 35%,#141422,#05050A);
+      border:2px solid rgba(167,139,250,0.4);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      position:relative;z-index:2;
+      animation:float-avatar 3s ease-in-out infinite;
+    ">
+      <img src="assets/avatar.svg" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+    </div>
+  </div>
+
+  <!-- Brook name -->
+  <div style="
+    font-family:'Cinzel',serif;font-size:36px;font-weight:900;
+    letter-spacing:8px;
+    background:linear-gradient(135deg,#A78BFA,#6EE7F7);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    margin-bottom:8px;
+  ">BROOK</div>
+
+  <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:4px;color:#FBBF24;opacity:0.8;margin-bottom:40px;">
+    SOUL KING AI COMPANION
+  </div>
+
+  <!-- Subtitle box -->
+  <div id="subtitleBox" style="
+    min-height:64px;
+    max-width:300px;width:90%;
+    text-align:center;
+    padding:14px 20px;
+    background:rgba(167,139,250,0.06);
+    border:1px solid rgba(167,139,250,0.15);
+    border-radius:16px;
+    margin-bottom:36px;
+    transition:opacity 0.4s ease;
+  ">
+    <div id="subtitleText" style="
+      font-family:'Cinzel',serif;
+      font-size:14px;line-height:1.7;
+      color:#D8D8F0;letter-spacing:0.5px;
+    ">🎵 ...</div>
+  </div>
+
+  <!-- Tap to skip -->
+  <div id="skipBtn" style="
+    font-size:11px;letter-spacing:2px;
+    color:rgba(144,144,184,0.5);
+    font-family:'JetBrains Mono',monospace;
+    cursor:pointer;
+    transition:color 0.2s;
+    opacity:0;
+    animation:fade-in 1s ease 1s forwards;
+  " onclick="skipIntro()">TAP TO SKIP</div>
+</div>
+
+<style>
+@keyframes fade-in { from{opacity:0;} to{opacity:1;} }
+</style>
+
+<audio id="brookIntro" src="assets/brook-intro.mp3" preload="auto"></audio>
+
+<!-- Intro Audio + Subtitles -->
 <script>
-  // ── State ──
-  let model = 'claude';
-  let history = [];
-  let busy = false;
+// Subtitle timings (seconds) — adjust if needed based on actual audio
+const SUBTITLES = [
+  { start: 0.0,  end: 1.2,  text: "🎵 ..." },
+  { start: 1.2,  end: 2.8,  text: "YOHOHOHOHO!" },
+  { start: 2.8,  end: 4.5,  text: "Hello everyone!" },
+  { start: 4.5,  end: 7.0,  text: "I am BROOK —" },
+  { start: 7.0,  end: 10.0, text: "the Soul King! 💀🎻" },
+];
 
-  const keys = {
-    claude: localStorage.getItem('brook_claude') || '',
-    gemini: localStorage.getItem('brook_gemini') || '',
-    groq:   localStorage.getItem('brook_groq')   || ''
+let introPlayed = false;
+let subtitleInterval = null;
+
+function startIntro() {
+  const audio = document.getElementById('brookIntro');
+  const overlay = document.getElementById('introOverlay');
+  const subtitleText = document.getElementById('subtitleText');
+
+  if (!audio || introPlayed) return;
+  introPlayed = true;
+
+  // Play audio
+  audio.volume = 0.9;
+  audio.play().catch(() => {
+    // Autoplay blocked — show tap to play
+    document.getElementById('skipBtn').style.opacity = '1';
+    document.getElementById('skipBtn').textContent = 'TAP TO PLAY';
+    document.getElementById('skipBtn').onclick = () => {
+      audio.play();
+      document.getElementById('skipBtn').textContent = 'TAP TO SKIP';
+      document.getElementById('skipBtn').onclick = skipIntro;
+      runSubtitles(audio, subtitleText);
+    };
+    return;
+  });
+
+  runSubtitles(audio, subtitleText);
+
+  // Auto dismiss when audio ends
+  audio.onended = () => {
+    setTimeout(skipIntro, 600);
   };
+}
 
-  // ── Init ──
-  (function init() {
-    if (keys.claude || keys.gemini || keys.groq) {
-      model = keys.claude ? 'claude' : keys.gemini ? 'gemini' : 'groq';
-      hideSetup();
-      syncModelUI();
+function runSubtitles(audio, subtitleText) {
+  subtitleInterval = setInterval(() => {
+    const t = audio.currentTime;
+    const sub = SUBTITLES.find(s => t >= s.start && t < s.end);
+    if (sub) {
+      subtitleText.style.opacity = '0';
+      setTimeout(() => {
+        subtitleText.textContent = sub.text;
+        subtitleText.style.opacity = '1';
+      }, 200);
     }
-  })();
+  }, 200);
+}
 
-  // ── Setup ──
-  function showTab(name, btn) {
-    document.querySelectorAll('.key-block').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.setup-tab').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    btn.classList.add('active');
+function skipIntro() {
+  const audio = document.getElementById('brookIntro');
+  const overlay = document.getElementById('introOverlay');
+  if (subtitleInterval) clearInterval(subtitleInterval);
+  audio.pause();
+  overlay.style.opacity = '0';
+  setTimeout(() => overlay.style.display = 'none', 800);
+}
+
+// Start on first user interaction (handles autoplay policy)
+window.addEventListener('load', () => {
+  setTimeout(startIntro, 400);
+});
+
+// Fallback: tap anywhere on overlay to start if autoplay blocked
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('introOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      const audio = document.getElementById('brookIntro');
+      if (audio.paused && !introPlayed) {
+        startIntro();
+      }
+    }, { once: true });
   }
+});
+</script>
 
-  function saveKeys() {
-    const c  = document.getElementById('claudeKey').value.trim();
-    const g  = document.getElementById('geminiKey').value.trim();
-    const gr = document.getElementById('groqKey').value.trim();
+<!-- Quick send helper -->
+<script>
+function quickSend(text) {
+  document.getElementById('msgInp').value = text;
+  goTo('chat');
+  sendMsg();
+}
+function saveCurrentChat() {
+  if (typeof history === 'undefined' || !history.length) { toast('Nothing to save yet!'); return; }
+  Memory.saveChat('Chat ' + new Date().toLocaleDateString(), history);
+  toast('Chat saved ✓');
+}
+</script>
 
-    if (!c && !g && !gr) { toast('Add at least one API key to continue.'); return; }
+<!-- Main app -->
+<script type="module" src="js/app.js"></script>
 
-    if (c)  { keys.claude = c;  localStorage.setItem('brook_claude', c); }
-    if (g)  { keys.gemini = g;  localStorage.setItem('brook_gemini', g); }
-    if (gr) { keys.groq   = gr; localStorage.setItem('brook_groq', gr); }
-
-    model = c ? 'claude' : g ? 'gemini' : 'groq';
-    hideSetup();
-    syncModelUI();
-    toast('BROOK is ready ✓');
-  }
-
-  function hideSetup() {
-    document.getElementById('setupOverlay').classList.add('hidden');
-    document.getElementById('msgInput').focus();
-  }
-
-  function openSettings() {
-    document.getElementById('setupOverlay').classList.remove('hidden');
-    if (keys.claude) document.getElementById('claudeKey').value = keys.claude;
-    if (keys.gemini) document.getElementById('geminiKey').value = keys.gemini;
-    if (keys.groq)   document.getElementById('groqKey').value   = keys.groq;
-  }
-
-  // ── Model switching ──
-  function switchModel(m) {
-    if (!keys[m]) { toast(`No ${m} key saved. Tap ⚙ Keys to add one.`); return; }
-    model = m;
-    syncModelUI();
-  }
-
-  function syncModelUI() {
-    const btns = document.querySelectorAll('.model-btn');
-    btns.forEach(b => b.classList.remove('active'));
-    const map = { claude: 0, gemini: 1, groq: 2 };
-    btns[map[model]].classList.add('active');
-
-    const colors = { claude: 'var(--brook)', gemini: 'var(--gemini)', groq: 'var(--groq)' };
-    const labels = { claude: 'Claude', gemini: 'Gemini', groq: 'Groq' };
-    const col = colors[model];
-    document.getElementById('activeDot').style.background = col;
-    document.getElementById('activeLabel').style.color = col;
-    document.getElementById('activeLabel').textContent = labels[model];
-  }
-
-  // ── Input ──
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
-  }
+</body>
+</html>
