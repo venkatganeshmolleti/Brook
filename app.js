@@ -1,149 +1,61 @@
-const brook = document.getElementById("brookCharacter");
-const splash = document.getElementById("splash");
-const intro = document.getElementById("intro");
-const loading = document.getElementById("loading");
-const chat = document.getElementById("chat");
-const audio = document.getElementById("introAudio");
-const skipIntro = document.getElementById("skipIntro");
-let started = false;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brook | Soul King</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-brook.addEventListener("click", () => {
+  <main class="app-container">
+    
+    <section id="splash" class="screen">
+      <div class="splash-content">
+        <h1 class="brook-title">BROOK</h1>
+        <img id="brookCharacter" src="./brook.png" alt="Brook" class="brook-image">
+        <p class="tap-text">( TAP BROOK )</p>
+      </div>
+    </section>
 
-    if(started) return;
-    started = true;
+    <section id="intro" class="screen" style="display: none;">
+      <div class="intro-content">
+        <h2>YOHOHOHOHO!</h2>
+        <p>I'm Brook,<br>musician of the Straw Hat Pirates.</p>
+        <button id="skipIntro" class="btn-primary">SKIP ➜</button>
+        <audio id="introAudio" src="./brook-intro.mp3"></audio> 
+      </div>
+    </section>
 
-    brook.classList.add("fade");
+    <section id="loading" class="screen" style="display: none;">
+      <div class="loading-content">
+        <h2>Preparing our next adventure...</h2>
+        <p class="pulse-text">👻 Soul scouting for answers...</p>
+      </div>
+    </section>
 
-    document.querySelector(".brook-title").classList.add("fade");
-    document.querySelector(".tap-text").classList.add("fade");
+    <section id="chat" class="screen chat-screen" style="display: none;">
+      <header class="chat-header">
+        <h2>Soul King Chat</h2>
+      </header>
+      
+      <div class="messages">
+        <div class="brook-msg">YOHOHOHOHO! Welcome back, Captain!</div>
+      </div>
+      
+      <div class="composer">
+        <input type="text" placeholder="Ask Brook something..." autocomplete="off">
+        <button class="btn-submit">➜</button>
+      </div>
+    </section>
 
-    setTimeout(() => {
+  </main>
 
-        intro.style.display = "flex";
-
-        audio.play();
-
-    }, 100);
-
-    audio.onended = () => {
-
-        intro.style.display = "none";
-
-        loading.style.display = "flex";
-
-        setTimeout(() => {
-
-            splash.style.display = "none";
-
-            loading.style.display = "none";
-
-            chat.style.display = "flex";
-
-        }, 2000);
-
-    };
-
-});
-
-/* ========================= */
-/* BROOK CHAT BOT */
-/* ========================= */
-
-const input = document.querySelector(".composer input");
-const button = document.querySelector(".composer button");
-const messages = document.querySelector(".messages");
-
-function addMessage(text, sender){
-
-    const div = document.createElement("div");
-
-    div.className =
-        sender === "brook"
-        ? "brook-msg"
-        : "user-msg";
-
-    div.innerText = text;
-
-    messages.appendChild(div);
-
-    messages.scrollTop =
-        messages.scrollHeight;
-}
-
-function brookReply(text){
-
-    text = text.toLowerCase();
-
-    if(text.includes("hi") || text.includes("hello")){
-
-        return "YOHOHOHOHO! Greetings Captain!";
-
-    }
-
-    if(text.includes("who are you")){
-
-        return "I am Brook, musician of the Straw Hat Pirates!";
-
-    }
-
-    if(text.includes("music")){
-
-        return "Music is the language of the soul! YOHOHOHOHO!";
-
-    }
-
-    if(text.includes("one piece")){
-
-        return "The One Piece awaits somewhere on the Grand Line!";
-
-    }
-
-    return "YOHOHOHOHO! I am still learning, Captain!";
-}
-
-function sendMessage(){
-
-    const text = input.value.trim();
-
-    if(!text) return;
-
-    addMessage(text,"user");
-
-    input.value = "";
-
-    setTimeout(() => {
-
-        addMessage(
-            brookReply(text),
-            "brook"
-        );
-
-    },700);
-}
-
-button.addEventListener(
-    "click",
-    sendMessage
-);
-
-input.addEventListener(
-    "keydown",
-    e => {
-
-        if(e.key==="Enter"){
-            sendMessage();
-        }
-
-    }
-);
-skipIntro.addEventListener("click", () => {
-
-    audio.pause();
-    audio.currentTime = 0;
-
-    intro.style.display = "none";
-    splash.style.display = "none";
-
-    chat.style.display = "flex";
-
-});
+  <script src="script.js"></script>
+</body>
+</html>
