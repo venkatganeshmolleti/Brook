@@ -3,54 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BROOK | Soul King</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>BROOK | Soul Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <main class="app-container">
+  <section id="splash" class="screen full-screen-overlay">
+    <div class="splash-content">
+      <img id="brookCharacter" src="./brook.png" alt="Brook" class="brook-image">
+      <h1 class="brook-title">BROOK</h1>
+      <h2 class="yohoho-text">YOHOHOHOHO!</h2>
+      <p class="intro-sub">I'm Brook,<br>musician of the Straw Hat Pirates.</p>
+      <p class="tap-text">( TAP ANYWHERE )</p>
+    </div>
+  </section>
+
+  <section id="introPlaying" class="screen full-screen-overlay" style="display: none;">
+    <div class="playing-content">
+      <img src="./brook.png" alt="Brook" class="brook-image floating-fast">
+      <h2 class="resonance-text">Soul resonance detected...</h2>
+      <div class="audio-wave">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div>
+      </div>
+      <audio id="introAudio" src="./brook-intro.mp3"></audio> 
+    </div>
+  </section>
+
+  <main id="mainApp" class="app-container" style="display: none;">
     
-    <section id="splash" class="screen">
-      <div class="splash-content">
-        <h1 class="brook-title">BROOK</h1>
-        <img id="brookCharacter" src="./brook.png" alt="Brook" class="brook-image" style="cursor: pointer; z-index: 10;">
-        <p class="tap-text">( TAP BROOK )</p>
-      </div>
-    </section>
+    <header class="app-header">
+      <div class="menu-icon">☰</div>
+      <h1 class="header-title">BR💀💀K</h1>
+      <div class="settings-icon">⚙</div>
+    </header>
 
-    <section id="intro" class="screen" style="display: none;">
-      <div class="intro-content">
-        <h2>YOHOHOHOHO!</h2>
-        <p>I'm Brook,<br>musician of the Straw Hat Pirates.</p>
-        <button id="skipIntro" class="btn-primary">SKIP ➜</button>
-        <audio id="introAudio" src="./brook-intro.mp3"></audio> 
+    <section id="tab-chat" class="tab-content active-tab">
+      <div class="bounty-widget">
+        <p class="widget-label">CURRENT BOUNTY</p>
+        <h2 class="widget-bounty"><span class="berry">🫐</span> <span id="chatBounty">135,000,000</span></h2>
+        <p class="widget-rank">RANK: <span id="chatRank" class="rank-highlight">Captain</span></p>
+        <div class="progress-bar-container">
+          <div class="progress-fill" style="width: 45%;"></div>
+        </div>
       </div>
-    </section>
 
-    <section id="loading" class="screen" style="display: none;">
-      <div class="loading-content">
-        <h2>Preparing our next adventure...</h2>
-        <p class="pulse-text">👻 Soul scouting for answers...</p>
-      </div>
-    </section>
-
-    <section id="chat" class="screen chat-screen" style="display: none;">
-      <header class="chat-header">
-        <h2>Soul King Chat</h2>
-      </header>
-      
-      <div class="messages">
-        <div class="brook-msg">YOHOHOHOHO! Welcome back, Captain!</div>
+      <div class="messages" id="chatMessages">
+        <div class="brook-msg">YOHOHOHOHO! Welcome back, Captain!<br><br>Shall we begin our next adventure?</div>
       </div>
       
       <div class="composer">
-        <input type="text" placeholder="Ask Brook something..." autocomplete="off">
-        <button class="btn-submit">➜</button>
+        <input type="text" id="chatInput" placeholder="Ask Brook anything..." autocomplete="off">
+        <button id="sendBtn" class="btn-submit">➜</button>
       </div>
     </section>
 
+    <section id="tab-adventures" class="tab-content" style="display: none;">
+      <h2 class="tab-title">ADVENTURES</h2>
+      <div class="adventure-filters">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Ongoing</button>
+        <button class="filter-btn">Completed</button>
+      </div>
+      
+      <div class="task-list">
+        <div class="task-card completed">
+          <div class="task-info">
+            <h3>Personal Portfolio Website</h3>
+            <p>Completed on 12 May 2026</p>
+          </div>
+          <div class="task-reward">+15,000,000</div>
+        </div>
+        <div class="task-card ongoing">
+          <div class="task-info">
+            <h3>AI Companion – Phase 2</h3>
+            <p>In Progress</p>
+          </div>
+          <div class="task-reward">+30,000,000</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-profile" class="tab-content" style="display: none;">
+      <div class="poster-container">
+        <div class="wanted-poster">
+          <h1 class="poster-title">WANTED</h1>
+          <div class="poster-image-box">
+             <div class="poster-photo"></div> 
+          </div>
+          <h2 class="poster-name">VENKAT GANESH</h2>
+          <p class="poster-crew">— CAPTAIN OF THE CREW —</p>
+          <h3 class="poster-bounty-label">BOUNTY</h3>
+          <h1 class="poster-bounty-amount"><span class="berry-dark">🫐</span> <span id="profileBounty">135,000,000</span></h1>
+          <p class="poster-issued">Issued by 💀 BROOK</p>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box"><h3>5</h3><p>ADVENTURES</p></div>
+        <div class="stat-box"><h3>12</h3><p>IDEAS</p></div>
+        <div class="stat-box"><h3>26</h3><p>DAYS ACTIVE</p></div>
+      </div>
+    </section>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-target="tab-chat">💬<br>Chat</button>
+      <button class="nav-item" data-target="tab-adventures">🗺️<br>Adventures</button>
+      <button class="nav-item" data-target="tab-profile">👤<br>Profile</button>
+    </nav>
   </main>
 
   <script src="app.js"></script>
