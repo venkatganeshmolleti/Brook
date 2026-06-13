@@ -1,350 +1,49 @@
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-background:#030308;
-color:white;
-overflow:hidden;
-height:100vh;
+    background:black;
+    overflow:hidden;
 }
-
-section{
-position:absolute;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-}
-
-#intro,
-#loading,
-#chat{
-display:none;
-}
-
-/* SPLASH */
 
 #splash{
-position:relative;
-background:#030308;
-overflow:hidden;
-}
-
-.aura{
-position:absolute;
-inset:0;
-
-background:
-radial-gradient(
-circle at center,
-rgba(140,0,255,.35),
-transparent 65%
-);
-
-filter:blur(60px);
-
-animation:pulse 4s infinite;
-
-z-index:0;
-}
-
-@keyframes pulse{
-50%{
-transform:scale(1.12);
-}
+    position:fixed;
+    inset:0;
 }
 
 #brookCharacter{
-position:absolute;
+    position:fixed;
+    inset:0;
 
-top:0;
-left:0;
+    width:100vw;
+    height:100vh;
 
-width:100vw;
-height:100vh;
+    object-fit:cover;
+    object-position:center;
 
-object-fit:contain;
-object-position:center;
-
-cursor:pointer;
-
-z-index:2;
-
-transition:all 2s ease;
-
-filter:
-drop-shadow(0 0 20px #b84dff)
-drop-shadow(0 0 80px #7a00ff);
-}
-
-.fade{
-opacity:.15;
-filter:blur(14px) brightness(.25);
-transition:all 2s ease;
+    display:block;
 }
 
 .brook-title{
-position:absolute;
+    position:fixed;
+    bottom:120px;
+    left:50%;
+    transform:translateX(-50%);
 
-bottom:120px;
-
-left:50%;
-
-transform:translateX(-50%);
-
-z-index:5;
-
-font-family:'Cinzel',serif;
-
-font-size:3.8rem;
-
-font-weight:900;
-
-letter-spacing:10px;
-
-color:#dca8ff;
-
-text-shadow:
-0 0 15px #7a00ff,
-0 0 35px #7a00ff,
-0 0 80px #b84dff;
+    color:white;
+    font-size:4rem;
+    z-index:10;
 }
 
 .tap-text{
-position:absolute;
-
-bottom:75px;
-
-left:50%;
-
-transform:translateX(-50%);
-
-z-index:5;
-
-font-size:1rem;
-
-letter-spacing:6px;
-
-color:#d9b0ff;
-
-animation:blink 2s infinite;
-}
-
-@keyframes blink{
-50%{
-opacity:.35;
-}
-}
-
-/* INTRO */
-
-#intro{
-position:absolute;
-inset:0;
-
-justify-content:center;
-align-items:center;
-flex-direction:column;
-
-background:transparent;
-
-z-index:100;
-
-text-align:center;
-
-padding:30px;
-}
-
-.intro-content{
-background:rgba(0,0,0,.35);
-
-backdrop-filter:blur(8px);
-
-padding:30px;
-
-border-radius:24px;
-
-max-width:90%;
-
-opacity:0;
-
-transform:translateY(50px);
-
-animation:introRise 1s forwards;
-}
-
-@keyframes introRise{
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-.yoho{
-font-size:3rem;
-
-margin-bottom:20px;
-
-color:#d9b0ff;
-
-text-shadow:
-0 0 15px #7a00ff,
-0 0 40px #7a00ff;
-}
-
-.intro-line{
-font-size:1.4rem;
-
-line-height:1.8;
-
-color:white;
-}
-
-/* LOADING */
-
-#loading{
-background:#030308;
-gap:25px;
-}
-
-.portal{
-width:180px;
-height:180px;
-
-border-radius:50%;
-
-background:
-radial-gradient(
-circle,
-#c76cff,
-transparent 70%
-);
-
-animation:portalPulse 2s infinite;
-}
-
-@keyframes portalPulse{
-50%{
-transform:scale(1.15);
-filter:blur(3px);
-}
-}
-
-#loading h2{
-color:#d7a4ff;
-font-size:1.3rem;
-text-align:center;
-padding:0 20px;
-}
-
-/* CHAT */
-
-#chat{
-background:#05050d;
-padding-top:20px;
-}
-
-.chat-header{
-font-size:2.3rem;
-font-weight:bold;
-letter-spacing:6px;
-
-color:#d6a2ff;
-
-text-shadow:0 0 15px #7a00ff;
-
-padding:20px;
-}
-
-.soul-banner{
-width:90%;
-
-background:#111122;
-
-padding:18px;
-
-border-radius:22px;
-
-margin-bottom:15px;
-
-text-align:center;
-
-color:#bffcff;
-}
-
-.messages{
-flex:1;
-width:100%;
-padding:20px;
-overflow:auto;
-}
-
-.brook-msg{
-background:#111122;
-
-padding:18px;
-
-border-radius:22px;
-
-width:85%;
-
-color:white;
-
-font-size:1.1rem;
-
-line-height:1.5;
-}
-
-.composer{
-width:100%;
-
-display:flex;
-
-gap:10px;
-
-padding:15px;
-}
-
-.composer input{
-flex:1;
-
-padding:16px;
-
-border:none;
-
-border-radius:18px;
-
-background:#111122;
-
-color:white;
-
-font-size:1rem;
-
-outline:none;
-}
-
-.composer button{
-width:70px;
-
-border:none;
-
-border-radius:18px;
-
-background:
-linear-gradient(
-135deg,
-#7a00ff,
-#b84dff
-);
-
-color:white;
-
-font-size:24px;
-
-cursor:pointer;
+    position:fixed;
+    bottom:80px;
+    left:50%;
+    transform:translateX(-50%);
+
+    color:white;
+    z-index:10;
 }
