@@ -72,11 +72,9 @@ drop-shadow(0 0 80px #7a00ff);
 }
 
 .fade{
-opacity:.25;
-transform:scale(1.08);
-filter:
-blur(12px)
-brightness(.35);
+opacity:.15;
+filter:blur(14px) brightness(.25);
+transition:all 2s ease;
 }
 
 .brook-title{
