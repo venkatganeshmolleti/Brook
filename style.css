@@ -469,3 +469,12 @@ linear-gradient(
 );
 
 }
+.user-msg{
+margin-left:auto;
+background:#7a00ff;
+padding:18px;
+border-radius:20px;
+width:85%;
+margin-top:10px;
+color:white;
+}
