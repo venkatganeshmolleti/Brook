@@ -23,7 +23,7 @@ brook.addEventListener("click", () => {
 
         audio.play();
 
-    }, 800);
+    }, 100);
 
     audio.onended = () => {
 
