@@ -1,103 +1,127 @@
-const brook = document.getElementById("brookCharacter");
+// --- 1. BOUNTY SYSTEM LOGIC ---
+// The exact tier list you provided
+const bountyTiers = [
+    { name: "Pirate Legend", min: 5000000000 },
+    { name: "Sea Emperor", min: 3500000000 },
+    { name: "Emperor Candidate", min: 2000000000 },
+    { name: "Elite Captain", min: 1000000000 },
+    { name: "Captain", min: 600000000 },
+    { name: "Super Rookie", min: 300000000 },
+    { name: "Adventurer", min: 150000000 },
+    { name: "Explorer", min: 75000000 },
+    { name: "Rookie Pirate", min: 30000000 },
+    { name: "Deckhand", min: 10000000 },
+    { name: "Cabin Boy", min: 0 }
+];
+
+// Current App State
+let currentBounty = 135000000; // Starting bounty based on your mockup
+
+function formatBounty(amount) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function calculateRank(bounty) {
+    for (let tier of bountyTiers) {
+        if (bounty >= tier.min) {
+            return tier.name;
+        }
+    }
+    return "Cabin Boy";
+}
+
+function updateBountyUI() {
+    const formatted = formatBounty(currentBounty);
+    const rank = calculateRank(currentBounty);
+    
+    // Update Chat Widget
+    document.getElementById("chatBounty").innerText = formatted;
+    document.getElementById("chatRank").innerText = rank;
+    
+    // Update Profile Poster
+    document.getElementById("profileBounty").innerText = formatted;
+}
+
+// Initialize UI on load
+updateBountyUI();
+
+
+// --- 2. SCREEN TRANSITIONS & AUDIO FIX ---
 const splash = document.getElementById("splash");
-const intro = document.getElementById("intro");
-const loading = document.getElementById("loading");
-const chat = document.getElementById("chat");
+const introPlaying = document.getElementById("introPlaying");
+const mainApp = document.getElementById("mainApp");
 const audio = document.getElementById("introAudio");
-const skipIntro = document.getElementById("skipIntro");
 let started = false;
 
-brook.addEventListener("click", () => {
-    if(started) return;
+// Listen for tap ANYWHERE on the splash screen
+splash.addEventListener("click", () => {
+    if (started) return;
     started = true;
 
-    brook.classList.add("fade");
-    document.querySelector(".brook-title").classList.add("fade");
-    document.querySelector(".tap-text").classList.add("fade");
+    // Mobile audio unlock trick
+    audio.load();
+    audio.play().then(() => { audio.pause(); }).catch(e => console.log(e));
 
+    // Transition to Playing screen
+    splash.style.display = "none";
+    introPlaying.style.display = "flex";
+    
+    // Play actual audio
+    audio.currentTime = 0;
+    audio.play().catch(e => console.log("Audio blocked", e));
+    
+    // Mock audio wave timer (transitions to main app after 4 seconds)
     setTimeout(() => {
-        splash.style.display = "none";
-        intro.style.display = "flex";
-        audio.play();
-    }, 800);
-
-    audio.onended = () => {
-        intro.style.display = "none";
-        loading.style.display = "flex";
-
-        setTimeout(() => {
-            loading.style.display = "none";
-            chat.style.display = "flex";
-        }, 2000);
-    };
+        introPlaying.style.display = "none";
+        mainApp.style.display = "flex";
+    }, 4000); // Adjust this timing based on your MP3 length
 });
 
-/* ========================= */
-/* BROOK CHAT BOT */
-/* ========================= */
 
-const input = document.querySelector(".composer input");
-const button = document.querySelector(".composer button");
-const messages = document.querySelector(".messages");
+// --- 3. TAB NAVIGATION SYSTEM ---
+const navButtons = document.querySelectorAll(".nav-item");
+const tabContents = document.querySelectorAll(".tab-content");
 
-function addMessage(text, sender){
+navButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        // Remove active class from all
+        navButtons.forEach(b => b.classList.remove("active"));
+        tabContents.forEach(t => t.style.display = "none");
+        
+        // Add active class to clicked
+        btn.classList.add("active");
+        const targetId = btn.getAttribute("data-target");
+        document.getElementById(targetId).style.display = "flex";
+    });
+});
+
+
+// --- 4. CHAT LOGIC ---
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+const messagesContainer = document.getElementById("chatMessages");
+
+function addMessage(text, sender) {
     const div = document.createElement("div");
-
     div.className = sender === "brook" ? "brook-msg" : "user-msg";
     div.innerText = text;
-
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+    messagesContainer.appendChild(div);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-function brookReply(text){
-    text = text.toLowerCase();
-
-    if(text.includes("hi") || text.includes("hello")){
-        return "YOHOHOHOHO! Greetings Captain!";
-    }
-
-    if(text.includes("who are you")){
-        return "I am Brook, musician of the Straw Hat Pirates!";
-    }
-
-    if(text.includes("music")){
-        return "Music is the language of the soul! YOHOHOHOHO!";
-    }
-
-    if(text.includes("one piece")){
-        return "The One Piece awaits somewhere on the Grand Line!";
-    }
-
-    return "YOHOHOHOHO! I am still learning, Captain!";
-}
-
-function sendMessage(){
-    const text = input.value.trim();
-    if(!text) return;
+function handleSend() {
+    const text = chatInput.value.trim();
+    if (!text) return;
 
     addMessage(text, "user");
-    input.value = "";
+    chatInput.value = "";
 
     setTimeout(() => {
-        addMessage(brookReply(text), "brook");
-    }, 700);
+        addMessage("YOHOHOHOHO! That sounds like an adventure!", "brook");
+    }, 800);
 }
 
-button.addEventListener("click", sendMessage);
-
-input.addEventListener("keydown", e => {
-    if(e.key === "Enter"){
-        sendMessage();
-    }
-});
-
-skipIntro.addEventListener("click", () => {
-    audio.pause();
-    audio.currentTime = 0;
-
-    intro.style.display = "none";
-    splash.style.display = "none";
-    loading.style.display = "none"; // Make sure loading is also hidden just in case
-    chat.style.display = "flex";
+sendBtn.addEventListener("click", handleSend);
+chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleSend();
 });
