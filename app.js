@@ -4,7 +4,7 @@ const intro = document.getElementById("intro");
 const loading = document.getElementById("loading");
 const chat = document.getElementById("chat");
 const audio = document.getElementById("introAudio");
-
+const skipIntro = document.getElementById("skipIntro");
 let started = false;
 
 brook.addEventListener("click", () => {
@@ -136,3 +136,14 @@ input.addEventListener(
 
     }
 );
+skipIntro.addEventListener("click", () => {
+
+    audio.pause();
+    audio.currentTime = 0;
+
+    intro.style.display = "none";
+    splash.style.display = "none";
+
+    chat.style.display = "flex";
+
+});
