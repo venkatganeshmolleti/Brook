@@ -15,6 +15,9 @@ brook.addEventListener("click", () => {
     // Blur Brook but keep him visible
     brook.classList.add("fade");
 
+document.querySelector(".brook-title").classList.add("fade");
+document.querySelector(".tap-text").classList.add("fade");
+
     // Show intro screen over splash
     setTimeout(() => {
 
