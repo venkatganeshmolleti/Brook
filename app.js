@@ -12,34 +12,40 @@ brook.addEventListener("click", () => {
     if(started) return;
     started = true;
 
-    // Play intro audio
-    audio.play();
-
-    // Fade Brook away
+    // Blur Brook but keep him visible
     brook.classList.add("fade");
 
-    // Show intro text after fade
+    // Show intro screen over splash
     setTimeout(() => {
 
-        splash.style.display = "none";
         intro.style.display = "flex";
 
-    }, 1500);
+        audio.play();
 
-    // When audio ends
+    }, 800);
+
+    // Audio finished
     audio.onended = () => {
 
-        intro.style.display = "none";
-
-        loading.style.display = "flex";
+        intro.style.opacity = "0";
 
         setTimeout(() => {
+
+            intro.style.display = "none";
+
+            loading.style.display = "flex";
+
+        }, 600);
+
+        setTimeout(() => {
+
+            splash.style.display = "none";
 
             loading.style.display = "none";
 
             chat.style.display = "flex";
 
-        }, 1800);
+        }, 2600);
 
     };
 
