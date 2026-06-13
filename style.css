@@ -1,1 +1,193 @@
-hi
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#030308;
+color:white;
+overflow:hidden;
+height:100vh;
+}
+
+section{
+position:absolute;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+#intro,
+#loading,
+#chat{
+display:none;
+}
+
+/* SPLASH */
+
+#splash{
+background:
+radial-gradient(circle at center,
+rgba(128,0,255,.25),
+transparent 50%),
+#030308;
+}
+
+.aura{
+position:absolute;
+width:280px;
+height:280px;
+border-radius:50%;
+background:
+radial-gradient(circle,
+rgba(180,100,255,.7),
+transparent 70%);
+filter:blur(40px);
+animation:pulse 3s infinite;
+}
+
+@keyframes pulse{
+50%{
+transform:scale(1.15);
+}
+}
+
+#brookCharacter{
+font-size:140px;
+z-index:2;
+cursor:pointer;
+transition:1.5s;
+filter:
+drop-shadow(0 0 20px #b84dff)
+drop-shadow(0 0 60px #7a00ff);
+}
+
+.fade{
+opacity:0;
+transform:scale(.7);
+}
+
+.brook-title{
+font-size:4rem;
+letter-spacing:12px;
+margin-top:10px;
+color:#c88cff;
+text-shadow:0 0 20px #7a00ff;
+}
+
+.tap-text{
+margin-top:20px;
+color:#b88cff;
+letter-spacing:3px;
+}
+
+/* INTRO */
+
+#intro{
+background:#030308;
+text-align:center;
+padding:30px;
+}
+
+.yoho{
+font-size:3rem;
+color:#d7a4ff;
+margin-bottom:20px;
+text-shadow:0 0 20px purple;
+}
+
+.intro-line{
+font-size:1.6rem;
+line-height:1.8;
+color:#f0e8ff;
+}
+
+/* LOADING */
+
+#loading{
+background:#030308;
+gap:20px;
+}
+
+.ghost{
+font-size:110px;
+animation:floatGhost 2s infinite;
+}
+
+@keyframes floatGhost{
+50%{
+transform:translateY(-15px);
+}
+}
+
+#loading h2{
+color:#d7a4ff;
+}
+
+/* CHAT */
+
+#chat{
+background:#05050d;
+padding-top:20px;
+}
+
+.chat-header{
+font-size:2rem;
+font-weight:bold;
+color:#c88cff;
+padding:20px;
+}
+
+.soul-banner{
+width:90%;
+background:#111122;
+padding:15px;
+border-radius:18px;
+margin-bottom:15px;
+text-align:center;
+color:#bffcff;
+}
+
+.messages{
+flex:1;
+width:100%;
+padding:20px;
+overflow:auto;
+}
+
+.brook-msg{
+background:#111122;
+padding:15px;
+border-radius:18px;
+width:80%;
+color:white;
+}
+
+.composer{
+width:100%;
+display:flex;
+gap:10px;
+padding:15px;
+}
+
+.composer input{
+flex:1;
+padding:15px;
+border:none;
+border-radius:15px;
+background:#111122;
+color:white;
+}
+
+.composer button{
+width:60px;
+border:none;
+border-radius:15px;
+background:#7a00ff;
+color:white;
+font-size:20px;
+}
