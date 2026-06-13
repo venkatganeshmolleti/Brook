@@ -21,33 +21,39 @@ align-items:center;
 flex-direction:column;
 }
 
+/* HIDDEN SCREENS */
+
 #intro,
 #loading,
 #chat{
 display:none;
 }
 
-/* SPLASH */
+/* SPLASH SCREEN */
 
 #splash{
 background:
 radial-gradient(circle at center,
-rgba(128,0,255,.25),
-transparent 50%),
+rgba(128,0,255,.20),
+transparent 40%),
 #030308;
+overflow:hidden;
 }
 
 .aura{
 position:absolute;
-width:280px;
-height:280px;
+width:500px;
+height:500px;
 border-radius:50%;
+
 background:
 radial-gradient(circle,
-rgba(180,100,255,.7),
+rgba(180,100,255,.5),
 transparent 70%);
+
 filter:blur(40px);
-animation:pulse 3s infinite;
+
+animation:pulse 4s infinite;
 }
 
 @keyframes pulse{
@@ -57,35 +63,68 @@ transform:scale(1.15);
 }
 
 #brookCharacter{
-font-size:140px;
-z-index:2;
+
+width:320px;
+height:440px;
+
+object-fit:cover;
+object-position:center top;
+
 cursor:pointer;
-transition:1.5s;
+z-index:2;
+
+transition:
+opacity 2s ease,
+transform 2s ease;
+
 filter:
 drop-shadow(0 0 20px #b84dff)
-drop-shadow(0 0 60px #7a00ff);
+drop-shadow(0 0 60px #7a00ff)
+drop-shadow(0 0 100px rgba(0,255,255,.2));
+
 }
 
 .fade{
+
 opacity:0;
-transform:scale(.7);
+
+transform:
+translateY(-100px)
+scale(.75);
+
 }
 
 .brook-title{
+
 font-size:4rem;
+
 letter-spacing:12px;
-margin-top:10px;
-color:#c88cff;
-text-shadow:0 0 20px #7a00ff;
+
+margin-top:-10px;
+
+color:#d6a2ff;
+
+text-shadow:
+0 0 15px #7a00ff,
+0 0 40px #7a00ff;
+
 }
 
 .tap-text{
-margin-top:20px;
+
+margin-top:15px;
+
+font-size:.95rem;
+
+letter-spacing:5px;
+
 color:#b88cff;
-letter-spacing:3px;
+
+opacity:.85;
+
 }
 
-/* INTRO */
+/* INTRO SCREEN */
 
 #intro{
 background:#030308;
@@ -93,21 +132,233 @@ text-align:center;
 padding:30px;
 }
 
+.intro-content{
+
+opacity:0;
+
+transform:translateY(50px);
+
+animation:introRise 1s forwards;
+
+}
+
+@keyframes introRise{
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
 .yoho{
+
 font-size:3rem;
-color:#d7a4ff;
+
 margin-bottom:20px;
-text-shadow:0 0 20px purple;
+
+color:#d9b0ff;
+
+text-shadow:
+0 0 15px #7a00ff,
+0 0 40px #7a00ff;
+
 }
 
 .intro-line{
-font-size:1.6rem;
+
+font-size:1.5rem;
+
 line-height:1.8;
-color:#f0e8ff;
+
+color:#ffffff;
+
 }
 
-/* LOADING */
+/* LOADING SCREEN */
 
+#loading{
+
+background:#030308;
+
+gap:25px;
+
+}
+
+.portal{
+
+width:180px;
+height:180px;
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle,
+#c76cff,
+transparent 70%
+);
+
+animation:
+portalPulse 2s infinite;
+
+}
+
+@keyframes portalPulse{
+
+50%{
+
+transform:scale(1.15);
+
+filter:blur(3px);
+
+}
+
+}
+
+#loading h2{
+
+color:#d7a4ff;
+
+font-size:1.3rem;
+
+text-align:center;
+
+padding:0 20px;
+
+}
+
+/* CHAT SCREEN */
+
+#chat{
+
+background:#05050d;
+
+padding-top:20px;
+
+}
+
+.chat-header{
+
+font-size:2.3rem;
+
+font-weight:bold;
+
+letter-spacing:6px;
+
+color:#d6a2ff;
+
+text-shadow:
+0 0 15px #7a00ff;
+
+padding:20px;
+
+}
+
+.soul-banner{
+
+width:90%;
+
+background:#111122;
+
+padding:18px;
+
+border-radius:22px;
+
+margin-bottom:15px;
+
+text-align:center;
+
+color:#bffcff;
+
+backdrop-filter:blur(10px);
+
+}
+
+.messages{
+
+flex:1;
+
+width:100%;
+
+padding:20px;
+
+overflow:auto;
+
+}
+
+.brook-msg{
+
+background:#111122;
+
+padding:18px;
+
+border-radius:22px;
+
+width:85%;
+
+color:white;
+
+font-size:1.1rem;
+
+line-height:1.5;
+
+}
+
+.composer{
+
+width:100%;
+
+display:flex;
+
+gap:10px;
+
+padding:15px;
+
+}
+
+.composer input{
+
+flex:1;
+
+padding:16px;
+
+border:none;
+
+border-radius:18px;
+
+background:#111122;
+
+color:white;
+
+font-size:1rem;
+
+outline:none;
+
+}
+
+.composer button{
+
+width:70px;
+
+border:none;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+135deg,
+#7a00ff,
+#b84dff
+);
+
+color:white;
+
+font-size:24px;
+
+cursor:pointer;
+
+}
 #loading{
 background:#030308;
 gap:20px;
